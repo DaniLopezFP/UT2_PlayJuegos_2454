@@ -16,11 +16,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,10 +35,22 @@ import androidx.compose.ui.unit.dp
 import com.example.compose.colorDani
 import com.example.compose.errorContainerDark
 import com.example.compose.errorContainerLight
+import com.example.compose.inversePrimaryLight
+import com.example.compose.tertiaryLight
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun MenuPlayer() {
+fun MenuNewPlayer() {
+    var EstadoNombre by remember { mutableStateOf("") }
+    var EstadoApellido by remember { mutableStateOf("") }
+    var EstadoNick by remember { mutableStateOf("") }
+    var EstadoTelf by remember { mutableStateOf("") }
+    var EstadoMail by remember { mutableStateOf("") }
+    var nameError by remember { mutableStateOf(false) } // Variable para el control de errores
+    var pesoH = 3f
+    var pesoV = 1f
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -52,23 +69,53 @@ fun MenuPlayer() {
                             .size(60.dp)
                             .weight(1f)
                     )
+                    TextField(
+                        value = EstadoNombre,
+                        onValueChange = {
+                            EstadoNombre = it
+                            nameError = false
+                        },
+                        Modifier.weight(2f),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = inversePrimaryLight,
+                            focusedIndicatorColor = colorDani
+                        ),
+                        isError = nameError,
+                        label = { Text(text = ("Nombre")) },
+                        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                    )
+                }
+                Row {
+                    val assistiveElementText =
+                        if (nameError) "Error: Obligatorio" else "*Obligatorio" // 4
+                    val assistiveElementColor = if (nameError) { // 5
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    }
+                    Spacer(Modifier.weight(2f))
                     Text(
-                        text = "Nombre", modifier = Modifier
-                            .weight(2f)
-                            .background(colorDani)
-                            .height(60.dp)
-                            .padding(10.dp)
+                        text = assistiveElementText,
+                        color = assistiveElementColor,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.weight(pesoH)
                     )
                 }
                 Spacer(modifier = Modifier.size(20.dp))
                 Row {
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = "Apellido", modifier = Modifier
-                            .weight(2f)
-                            .background(colorDani)
-                            .height(60.dp)
-                            .padding(10.dp)
+                    TextField(
+                        value = EstadoApellido,
+                        onValueChange = {
+                            EstadoApellido = it
+                        },
+                        Modifier.weight(2f),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = inversePrimaryLight,
+                            focusedIndicatorColor = colorDani
+                        ),
+                        label = { Text(text = ("Apellido")) },
+                        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                     )
                 }
 
@@ -81,12 +128,19 @@ fun MenuPlayer() {
                             .size(60.dp)
                             .weight(1f)
                     )
-                    Text(
-                        text = "Nickname", modifier = Modifier
-                            .weight(2f)
-                            .background(colorDani)
-                            .height(60.dp)
-                            .padding(10.dp)
+
+                    TextField(
+                        value = EstadoNick,
+                        onValueChange = {
+                            EstadoNick = it
+                        },
+                        Modifier.weight(2f),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = inversePrimaryLight,
+                            focusedIndicatorColor = colorDani
+                        ),
+                        label = { Text(text = ("Nickname")) },
+                        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                     )
                 }
                 Spacer(modifier = Modifier.size(20.dp))
@@ -105,7 +159,7 @@ fun MenuPlayer() {
                     Button(
                         onClick = { },//navController.navigate("NewPlayer") },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = errorContainerLight,
+                            containerColor = colorDani,
                             contentColor = Color.Black
                         ),
                         modifier = Modifier.width(200.dp).width(100.dp).weight(2f).padding(vertical = 30.dp)
@@ -122,12 +176,19 @@ fun MenuPlayer() {
                             .size(60.dp)
                             .weight(1f)
                     )
-                    Text(
-                        text = "Teléfono", modifier = Modifier
-                            .weight(2f)
-                            .background(colorDani)
-                            .height(60.dp)
-                            .padding(10.dp)
+
+                    TextField(
+                        value = EstadoTelf,
+                        onValueChange = {
+                            EstadoTelf = it
+                        },
+                        Modifier.weight(2f),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = inversePrimaryLight,
+                            focusedIndicatorColor = colorDani
+                        ),
+                        label = { Text(text = ("Teléfono")) },
+                        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                     )
                 }
                 Spacer(modifier = Modifier.size(20.dp))
@@ -139,14 +200,30 @@ fun MenuPlayer() {
                             .size(60.dp)
                             .weight(1f)
                     )
-                    Text(
-                        text = "E-mail", modifier = Modifier
-                            .weight(2f)
-                            .background(colorDani)
-                            .height(60.dp)
-                            .padding(10.dp)
+                    TextField(
+                        value = EstadoMail,
+                        onValueChange = {
+                            EstadoMail = it
+                        },
+                        Modifier.weight(2f),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = inversePrimaryLight,
+                            focusedIndicatorColor = colorDani
+                        ),
+                        label = { Text(text = ("E-mail")) },
+                        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                     )
                 }
+            }
+            Spacer(Modifier.height(20.dp))
+            Row() {
+                Button(
+                    onClick = { nameError = EstadoNombre.isBlank() },
+                    shape = RoundedCornerShape(15.dp)
+                ) {
+                    Text(text = "Add new player")
+                }
+
             }
         }
     }

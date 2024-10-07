@@ -30,6 +30,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.compose.UT2P1_PlayGamesTheme
 import com.example.ui.theme.courgetteRegularFamily
 
@@ -46,31 +50,37 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //Greeting("Android")
-                    MenuPlayGame()
+                    //MenuPlayGame()
                     //MenuPlayer()
+
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "PlayJuegos") {
+                        composable("NewPlayer") { MenuNewPlayer() }
+                        composable("PlayJuegos") { MenuPlayGames(navController) }
+                        composable("Preferences") { preferences() }
+                    }
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun MenuPlayGame() {
+fun MenuPlayGames(navController: NavHostController) {
     val configuration = LocalConfiguration.current
     when (configuration.orientation) {
         Configuration.ORIENTATION_PORTRAIT -> {
-            MenuVertical()
+            MenuVertical(navController)
         }
         else -> {
-            MenuHorizontal()
+            MenuHorizontal(navController)
         }
     }
 
 }
 
 @Composable
-fun MenuVertical() {
+fun MenuVertical(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -103,13 +113,13 @@ fun MenuVertical() {
             }
             //Spacer(modifier = Modifier.size(20.dp))
             Button(
-                onClick = { },//navController.navigate("Preferences") },
+                onClick = {navController.navigate("NewPlayer") },
                 modifier = Modifier.width(200.dp)
             ) {
                 Text(text = "New Player")
             }
             Button(
-                onClick = { },//navController.navigate("NewPlayer") },
+                onClick = {  navController.navigate("Preferences") },
                 modifier = Modifier.width(200.dp)
             ) {
                 Text(text = "Preferences")
@@ -135,7 +145,7 @@ fun MenuVertical() {
 }
 
 @Composable
-fun MenuHorizontal() {
+fun MenuHorizontal(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -177,7 +187,7 @@ fun MenuHorizontal() {
             }
             Spacer(modifier = Modifier.size(20.dp))
             Button(
-                onClick = { },//navController.navigate("NewPlayer") },
+                onClick = { navController.navigate("NewPlayer") },
                 modifier = Modifier.width(200.dp)
             ) {
                 Text(text = "Preferences")
